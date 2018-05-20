@@ -19,7 +19,7 @@ module Danger
       end
 
       `aapt d permissions #{apk_path} | sort > #{tmp_file}`
-      diff = `diff #{tmp_file} #{permission_list_file_path}`
+      diff = `diff #{tmp_file} <(sort #{permission_list_file_path})`
 
       if diff
         warn("Permissions changed.\n```#{diff}```")
