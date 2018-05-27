@@ -38,7 +38,7 @@ module Danger
         end
       end
 
-      warn(markdown(message)) if message
+      warn(message) if message
     end
   end
 end
