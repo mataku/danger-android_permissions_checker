@@ -23,7 +23,7 @@ module Danger
       message = ""
       
       if deleted.length > 0
-        message += "Deleted permissions\n"
+        message += "### Deleted permissions\n"
         deleted.each do |v|
           message += "- #{v}\n"
         end
@@ -31,11 +31,16 @@ module Danger
       end
 
       if added.length > 0
-        message += "Added Permissions\n"
+        message += "### Added Permissions\n"
 
         added.each do |v|
           message += "- #{v}\n"
         end
+      end
+
+      if message
+        markdown(message)
+        warn('APK permissions changed, see below.')
       end
 
       warn(message) if message
