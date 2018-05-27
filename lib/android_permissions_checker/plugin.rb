@@ -42,8 +42,6 @@ module Danger
         markdown(message)
         warn('APK permissions changed, see below.')
       end
-
-      warn(message) if message
     end
   end
 end
