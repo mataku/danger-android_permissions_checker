@@ -15,8 +15,8 @@ module Danger
         raise 'Can\'t find required command: aapt. Set PATH to Android Build-tools.'
       end
 
-      current_permissions = `aapt d permissions #{apk}`.split("\n")
-      generated_permissions = File.open(permission_list_file).readlines.map(&:chomp)
+      generated_permissions = `aapt d permissions #{apk}`.split("\n")
+      current_permissions = File.open(permission_list_file).readlines.map(&:chomp)
 
       deleted = current_permissions - generated_permissions
       added = generated_permissions - current_permissions
