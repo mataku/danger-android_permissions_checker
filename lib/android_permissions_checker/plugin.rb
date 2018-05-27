@@ -38,7 +38,7 @@ module Danger
         end
       end
 
-      if message
+      unless message.empty?
         markdown(message)
         warn('APK permissions changed, see below.')
       end
