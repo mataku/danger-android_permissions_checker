@@ -40,7 +40,7 @@ module Danger
 
       unless message.empty?
         markdown(message)
-        warn('APK permissions changed, see below.')
+        warn("APK permissions changed, see below. Should update #{permission_list_file} if it is intended change.")
       end
     end
   end
