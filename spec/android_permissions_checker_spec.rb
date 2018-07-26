@@ -49,7 +49,7 @@ module Danger
         it do
           plugin.check(apk: apk, permission_list_file: current_permission_file)
           expect(dangerfile.status_report[:warnings].length).to eq(1)
-          expect(dangerfile.status_report[:warnings][0]).to eq("APK permissions changed, see below. Should update #{current_permission_file} if it is intended change.")
+          expect(dangerfile.status_report[:warnings][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
           expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
 
