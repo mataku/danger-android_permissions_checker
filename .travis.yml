@@ -5,4 +5,4 @@ cache:
 rvm:
   - 2.5.1
 script:
-    - bundle exec rake spec
+    - bundle exec rspec spec
