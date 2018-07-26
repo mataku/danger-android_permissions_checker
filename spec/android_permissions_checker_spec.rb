@@ -4,7 +4,7 @@ module Danger
   describe Danger::DangerAndroidPermissionsChecker do
     let(:dangerfile) { testing_dangerfile }
     let(:plugin) { dangerfile.android_permissions_checker }
-    
+
     it "should be a plugin" do
       expect(Danger::DangerAndroidPermissionsChecker.new(nil)).to be_a Danger::Plugin
     end
@@ -27,7 +27,7 @@ module Danger
       end
 
       before do
-        allow(current_permission_file).to receive(:nil?).and_return(false) 
+        allow(current_permission_file).to receive(:nil?).and_return(false)
         allow(apk).to receive(:nil?).and_return(false)
         allow(File).to receive(:exist?).with(current_permission_file).and_return(true)
         allow(File).to receive(:exist?).with(apk).and_return(true)
@@ -49,7 +49,7 @@ module Danger
         it do
           plugin.check(apk: apk, permission_list_file: current_permission_file)
           expect(dangerfile.status_report[:warnings].length).to eq(1)
-          expect(dangerfile.status_report[:warnings][0]).to eq('APK permissions changed, see below.')
+          expect(dangerfile.status_report[:warnings][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
           expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
 
@@ -64,7 +64,7 @@ module Danger
         it do
           plugin.check(apk: apk, permission_list_file: current_permission_file)
           expect(dangerfile.status_report[:warnings].length).to eq(1)
-          expect(dangerfile.status_report[:warnings][0]).to eq('APK permissions changed, see below.')
+          expect(dangerfile.status_report[:warnings][0]).to include('APK permissions changed, see below.')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).not_to include('Added')
         end
@@ -78,7 +78,7 @@ module Danger
         it do
           plugin.check(apk: apk, permission_list_file: current_permission_file)
           expect(dangerfile.status_report[:warnings].length).to eq(1)
-          expect(dangerfile.status_report[:warnings][0]).to eq('APK permissions changed, see below.')
+          expect(dangerfile.status_report[:warnings][0]).to include('APK permissions changed, see below.')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
         end

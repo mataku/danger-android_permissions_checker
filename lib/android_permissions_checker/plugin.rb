@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module Danger
   class DangerAndroidPermissionsChecker < Plugin
     def check(apk: nil, permission_list_file: nil)
@@ -21,7 +19,7 @@ module Danger
       deleted = current_permissions - generated_permissions
       added = generated_permissions - current_permissions
       message = ""
-      
+
       if deleted.length > 0
         message += "### Deleted permissions\n"
         deleted.each do |v|
@@ -40,7 +38,7 @@ module Danger
 
       unless message.empty?
         markdown(message)
-        warn('APK permissions changed, see below.')
+        warn("APK permissions changed, see below. Should update `#{permission_list_file}` if it is intended change.")
       end
     end
   end
