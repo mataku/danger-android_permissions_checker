@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module Danger
   class DangerAndroidPermissionsChecker < Plugin
     def check(apk: nil, permission_list_file: nil)
