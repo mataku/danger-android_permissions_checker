@@ -133,6 +133,17 @@ module Danger
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
         end
       end
+
+      context 'Report method set to unknown' do
+        let(:generated_permissions) do
+          "package: com.mataku.scrobscrob.dev\nuses-permission: name='android.permission.INTERNET'\nuses-permission: name='com.mataku.INTERNET'\n"
+        end
+
+        it 'should fail' do
+          plugin.report_method = 'unknown'
+          expect { plugin.check(apk: apk, permission_list_file: current_permission_file) }.to raise_error("Unknown report method: unknown")
+        end
+      end
     end
   end
 end
