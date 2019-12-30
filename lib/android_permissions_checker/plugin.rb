@@ -2,7 +2,7 @@ module Danger
   class DangerAndroidPermissionsChecker < Plugin
     def check(apk: nil, permission_list_file: nil)
       if apk.nil? || !File.exist?(apk)
-        raise "Can\'t find apk: #{apk}"
+        raise "Can't find apk: #{apk}"
       end
 
       if permission_list_file.nil? || !File.exist?(permission_list_file)
@@ -10,7 +10,7 @@ module Danger
       end
 
       unless system 'which aapt > /dev/null 2>&1'
-        raise 'Can\'t find required command: aapt. Set PATH to Android Build-tools.'
+        raise "Can't find required command: aapt. Set PATH to Android Build-tools."
       end
 
       generated_permissions = `aapt d permissions #{apk}`.split("\n")
