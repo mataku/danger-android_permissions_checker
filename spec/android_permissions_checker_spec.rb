@@ -52,7 +52,6 @@ module Danger
           expect(dangerfile.status_report[:warnings][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
           expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
-
         end
       end
 
@@ -80,6 +79,57 @@ module Danger
           expect(dangerfile.status_report[:warnings].length).to eq(1)
           expect(dangerfile.status_report[:warnings][0]).to include('APK permissions changed, see below.')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Deleted')
+          expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
+        end
+      end
+
+      context 'Report method set to fail' do
+        let(:generated_permissions) do
+          "package: com.mataku.scrobscrob.dev\nuses-permission: name='android.permission.INTERNET'\nuses-permission: name='com.mataku.INTERNET'\n"
+        end
+
+        it 'should report errors' do
+          plugin.report_method = 'fail'
+          plugin.check(apk: apk, permission_list_file: current_permission_file)
+          expect(dangerfile.status_report[:errors].length).to eq(1)
+          expect(dangerfile.status_report[:errors][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
+          expect(dangerfile.status_report[:messages].length).to eq(0)
+          expect(dangerfile.status_report[:warnings].length).to eq(0)
+          expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
+          expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
+        end
+      end
+
+      context 'Report method set to message' do
+        let(:generated_permissions) do
+          "package: com.mataku.scrobscrob.dev\nuses-permission: name='android.permission.INTERNET'\nuses-permission: name='com.mataku.INTERNET'\n"
+        end
+
+        it 'should report messages' do
+          plugin.report_method = 'message'
+          plugin.check(apk: apk, permission_list_file: current_permission_file)
+          expect(dangerfile.status_report[:errors].length).to eq(0)
+          expect(dangerfile.status_report[:messages].length).to eq(1)
+          expect(dangerfile.status_report[:messages][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
+          expect(dangerfile.status_report[:warnings].length).to eq(0)
+          expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
+          expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
+        end
+      end
+
+      context 'Report method set to warn' do
+        let(:generated_permissions) do
+          "package: com.mataku.scrobscrob.dev\nuses-permission: name='android.permission.INTERNET'\nuses-permission: name='com.mataku.INTERNET'\n"
+        end
+
+        it 'should report warnings' do
+          plugin.report_method = 'warn'
+          plugin.check(apk: apk, permission_list_file: current_permission_file)
+          expect(dangerfile.status_report[:errors].length).to eq(0)
+          expect(dangerfile.status_report[:messages].length).to eq(0)
+          expect(dangerfile.status_report[:warnings].length).to eq(1)
+          expect(dangerfile.status_report[:warnings][0]).to eq("APK permissions changed, see below. Should update `#{current_permission_file}` if it is intended change.")
+          expect(dangerfile.status_report[:markdowns][0].message).not_to include('Deleted')
           expect(dangerfile.status_report[:markdowns][0].message).to include('Added')
         end
       end
