@@ -1,4 +1,25 @@
 module Danger
+  # Check permissions between current permissions and APK generated on CI service.
+  # If changed, show permissions which added or deleted.
+  #
+  # @example Running Android permissions checker with its basic configuration
+  #
+  #          android_permissions_checker.check(
+  #            apk: '/path/to/generated_apk_by_CI',
+  #            permission_list_file: /path/to/permissions.txt
+  #          )
+  #
+  # @example Running Android permissions checker with specific report method
+  #
+  #          android_permissions_checker.report_method = 'fail'
+  #          android_permissions_checker.check(
+  #            apk: '/path/to/generated_apk_by_CI',
+  #            permission_list_file: /path/to/permissions.txt
+  #          )
+  #
+  # @see mataku/danger-android_permissions_checker
+  # @tags android, permissions, apk
+
   class DangerAndroidPermissionsChecker < Plugin
     REPORT_METHODS = %i(message warn fail).freeze
 
@@ -8,6 +29,8 @@ module Danger
     # @return [String, Symbol] error by default
     attr_accessor :report_method
 
+    # Calls permissions check.
+    # @return [void]
     def check(apk: nil, permission_list_file: nil)
       if apk.nil? || !File.exist?(apk)
         raise "Can't find apk: #{apk}"
