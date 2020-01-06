@@ -1,8 +1,39 @@
 module Danger
+  # Check permissions between current permissions and APK generated on CI service.
+  # If changed, show permissions which added or deleted.
+  #
+  # @example Running Android permissions checker with its basic configuration
+  #
+  #          android_permissions_checker.check(
+  #            apk: '/path/to/generated_apk_by_CI',
+  #            permission_list_file: /path/to/permissions.txt
+  #          )
+  #
+  # @example Running Android permissions checker with specific report method
+  #
+  #          android_permissions_checker.report_method = 'fail'
+  #          android_permissions_checker.check(
+  #            apk: '/path/to/generated_apk_by_CI',
+  #            permission_list_file: /path/to/permissions.txt
+  #          )
+  #
+  # @see mataku/danger-android_permissions_checker
+  # @tags android, permissions, apk
+
   class DangerAndroidPermissionsChecker < Plugin
+    REPORT_METHODS = %i(message warn fail).freeze
+
+    # *Optional*
+    # Set report method
+    #
+    # @return [String, Symbol] error by default
+    attr_accessor :report_method
+
+    # Calls permissions check.
+    # @return [void]
     def check(apk: nil, permission_list_file: nil)
       if apk.nil? || !File.exist?(apk)
-        raise "Can\'t find apk: #{apk}"
+        raise "Can't find apk: #{apk}"
       end
 
       if permission_list_file.nil? || !File.exist?(permission_list_file)
@@ -10,7 +41,12 @@ module Danger
       end
 
       unless system 'which aapt > /dev/null 2>&1'
-        raise 'Can\'t find required command: aapt. Set PATH to Android Build-tools.'
+        raise "Can't find required command: aapt. Set PATH to Android Build-tools."
+      end
+
+      @report_method = (report_method || :warn).to_sym
+      unless REPORT_METHODS.include?(report_method)
+        raise "Unknown report method: #{report_method}"
       end
 
       generated_permissions = `aapt d permissions #{apk}`.split("\n")
@@ -38,7 +74,7 @@ module Danger
 
       unless message.empty?
         markdown(message)
-        warn("APK permissions changed, see below. Should update `#{permission_list_file}` if it is intended change.")
+        send(report_method, "APK permissions changed, see below. Should update `#{permission_list_file}` if it is intended change.")
       end
     end
   end
