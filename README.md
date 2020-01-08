@@ -40,6 +40,9 @@ android_permissions_checker.check(
 
 This gem uses `aapt`  command to parse permissions of generated apk, so you need to add /path/to/aapt (Android Build-tools) to $PATH on your CI service.
 
+## ChangeLog
+
+See [ChangeLog.md](https://github.com/mataku/danger-android_permissions_checker/blob/master/ChangeLog.md).
 
 ## Development
 
