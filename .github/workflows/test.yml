@@ -8,9 +8,17 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7.2'
-      - run: bundle install --jobs=$(($(nproc) - 1))
+      - run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install --jobs=$(($(nproc) - 1))
       - run: bundle exec rspec
 
